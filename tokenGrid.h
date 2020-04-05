@@ -6,7 +6,6 @@
 #define TOKENGRID_H
 
 #include <stdio.h>
-#include "dynamicArray.h"
 
 // ------------------------------------------------------------
 
@@ -25,10 +24,12 @@ typedef struct tokenGrid {
  * Tokenizes a file stream into a 2-D array that represents the token layout in
  * the stream.
  * The token separator string marks the division between two tokens on the same
- * line.
+ * line. It must be null-terminated.
  * A line separator string marks the division between two lines of tokens, hence
  * why the result is a 2-D array. Typically, LF or CRLF would be passed in for
- * this parameter.
+ * this parameter. It must be null-terminated.
+ * Stream content is tokenized in appearance order. If occurrences of both types
+ * of separators start at the same index, the line separator "wins".
  * tokGd_cleanup() should be called when grid usage is complete to avoid memory
  * leaks.
  * Return: A struct that holds the tokens in a 2-D array format
@@ -37,13 +38,15 @@ tokenGrid * tokGd_tokenizeFile(FILE *file, const char *tokenSeparator,
 const char *lineSeparator);
 
 /*
- * Tokenizes a string into a 2-D array that represents the token layout in the
- * string.
+ * Tokenizes a null-terminated string into a 2-D array that represents the token
+ * layout in the string.
  * The token separator string marks the division between two tokens on the same
- * line.
+ * line. It must be null-terminated.
  * A line separator string marks the division between two lines of tokens, hence
  * why the result is a 2-D array. Typically, LF or CRLF would be passed in for
- * this parameter.
+ * this parameter. It must be null-terminated.
+ * String content is tokenized in appearance order. If occurrences of both types
+ * of separators start at the same index, the line separator "wins".
  * tokGd_cleanup() should be called when grid usage is complete to avoid memory
  * leaks.
  * Return: A struct that holds the tokens in a 2-D array format
