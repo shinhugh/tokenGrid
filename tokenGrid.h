@@ -30,12 +30,14 @@ typedef struct tokenGrid {
  * this parameter. It must be null-terminated.
  * Stream content is tokenized in appearance order. If occurrences of both types
  * of separators start at the same index, the line separator "wins".
+ * noEmptyToken specifies whether empty tokens and lines should be removed from
+ * the result grid. A non-zero value will cause the removal.
  * tokGd_cleanup() should be called when grid usage is complete to avoid memory
  * leaks.
  * Return: A struct that holds the tokens in a 2-D array format
  */
 tokenGrid * tokGd_tokenizeFile(FILE *file, const char *tokenSeparator,
-const char *lineSeparator);
+const char *lineSeparator, unsigned char noEmptyToken);
 
 /*
  * Tokenizes a null-terminated string into a 2-D array that represents the token
@@ -47,12 +49,14 @@ const char *lineSeparator);
  * this parameter. It must be null-terminated.
  * String content is tokenized in appearance order. If occurrences of both types
  * of separators start at the same index, the line separator "wins".
+ * noEmptyToken specifies whether empty tokens and lines should be removed from
+ * the result grid. A non-zero value will cause the removal.
  * tokGd_cleanup() should be called when grid usage is complete to avoid memory
  * leaks.
  * Return: A struct that holds the tokens in a 2-D array format
  */
 tokenGrid * tokGd_tokenizeStr(const char *str, const char *tokenSeparator,
-const char *lineSeparator);
+const char *lineSeparator, unsigned char noEmptyToken);
 
 /*
  * Get a token from the result of a tokenize call by its coordinates in the

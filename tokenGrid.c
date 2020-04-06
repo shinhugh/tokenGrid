@@ -18,7 +18,7 @@ void printState(dynamicArray *array);
 // ------------------------------------------------------------
 
 tokenGrid * tokGd_tokenizeFile(FILE *file, const char *tokenSeparator,
-const char *lineSeparator) {
+const char *lineSeparator, unsigned char noEmptyToken) {
 
   // TODO
   return 0;
@@ -28,8 +28,9 @@ const char *lineSeparator) {
 // ------------------------------------------------------------
 
 tokenGrid * tokGd_tokenizeStr(const char *str, const char *tokenSeparator,
-const char *lineSeparator) {
+const char *lineSeparator, unsigned char noEmptyToken) {
 
+  unsigned int i, j;
   tokenGrid *result;
   dynamicArray *lines;
   char *newToken;
@@ -99,6 +100,25 @@ const char *lineSeparator) {
     dyArr_deinitialize(dyArr_getElement(lines, dyArr_getCount(lines) - 1));
     free(dyArr_getElement(lines, dyArr_getCount(lines) - 1));
     dyArr_removeElement(lines, dyArr_getCount(lines) - 1);
+  }
+
+  if(noEmptyToken) {
+    for(i = 0; i < dyArr_getCount(lines); i++) {
+      for(j = 0; j < dyArr_getCount(dyArr_getElement(lines, i)); j++) {
+        if(dyArr_getElement(dyArr_getElement(lines, i), j)[0] == 0) {
+          dyArr_removeElement(dyArr_getElement(lines, i), j);
+          j--;
+        }
+      }
+    }
+    for(i = 0; i < dyArr_getCount(lines); i++) {
+      if(dyArr_getCount(dyArr_getElement(lines, i)) == 0) {
+        dyArr_deinitialize(dyArr_getElement(lines, i));
+        free(dyArr_getElement(lines, i));
+        dyArr_removeElement(lines, i);
+        i--;
+      }
+    }
   }
 
   return result;
@@ -218,7 +238,8 @@ void printState(dynamicArray *array) {
 
   for(i = 0; i < dyArr_getCount(array); i++) {
     for(j = 0; j < dyArr_getCount(dyArr_getElement(array, i)); j++) {
-      printf("(%d, %d): %s\n", i, j, (char*) dyArr_getElement(dyArr_getElement(array, i), j));
+      printf("(%d, %d): %s\n", i, j,
+      (char*) dyArr_getElement(dyArr_getElement(array, i), j));
     }
   }
 
