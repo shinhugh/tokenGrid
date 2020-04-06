@@ -1,31 +1,36 @@
 # Compiler
 CC = gcc
 # Compiler flags
-CFLAGS = -g
+CFLAGS = -g -I . -I $(PATH_DYARR) -I $(PATH_DYSTR) -L . -L $(PATH_DYARR) \
+-L $(PATH_DYSTR)
 # dynamicArray path
-DYARR_PATH = lib/dynamicArray
-# Targets to make
-TARGETS = libtokenGrid.a tokenGrid.o $(DYARR_PATH)/dynamicArray.o test
+PATH_DYARR = lib/dynamicArray
+# dynamicString path
+PATH_DYSTR = lib/dynamicString
+# Object files
+OBJ = tokenGrid.o $(PATH_DYARR)/dynamicArray.o $(PATH_DYSTR)/dynamicString.o
+# Header files
+HEADERS = tokenGrid.h $(PATH_DYARR)/dynamicArray.h $(PATH_DYSTR)/dynamicString.h
+# Targets possible to make
+TARGETS = libtokenGrid.a $(OBJ) test
 
-all: libtokenGrid.a
+default: libtokenGrid.a
 
 # Make static library tokenGrid
-libtokenGrid.a: tokenGrid.o $(DYARR_PATH)/dynamicArray.o
+libtokenGrid.a: $(OBJ)
 	ar rcs $@ $^
 
 # Make tokenGrid.o
-tokenGrid.o: tokenGrid.c tokenGrid.h $(DYARR_PATH)/dynamicArray.h
-	$(CC) -c -o $@ $< -I . -I $(DYARR_PATH) $(CFLAGS)
+tokenGrid.o: tokenGrid.c $(HEADERS)
+	$(CC) -c -o $@ $< $(CFLAGS)
 
-# Make dynamicArray.o
-lib/dynamicArray/dynamicArray.o: $(DYARR_PATH)/dynamicArray.c \
-$(DYARR_PATH)/dynamicArray.h
-	$(CC) -c -o $@ $< -I $(DYARR_PATH) $(CFLAGS)
+# Make object files
+%.o: %.c %.h
+	$(CC) -c -o $@ $< $(CFLAGS)
 
 # Make test program
-test: tests/test.c libtokenGrid.a
-	$(CC) -o test $< -I . -I $(DYARR_PATH) -L . -L $(DYARR_PATH) -l tokenGrid \
-$(CFLAGS)
+test: tests/test.c tokenGrid.h libtokenGrid.a
+	$(CC) -o $@ $< $(CFLAGS) -l tokenGrid
 
 .PHONY: clean
 
