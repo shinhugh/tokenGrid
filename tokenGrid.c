@@ -7,9 +7,6 @@
 #include "dynamicArray.h"
 #include "tokenGrid.h"
 
-#define INITIAL_STR_SIZE 32
-#define STR_SIZE_MULT 2
-
 // ------------------------------------------------------------
 
 unsigned char TOKGD_OUT_OF_BOUNDS;
