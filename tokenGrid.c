@@ -42,11 +42,11 @@ const char *lineSeparator, unsigned char noEmptyToken) {
   dyArr_initialize(lines);
   dyArr_appendElement(lines, malloc(sizeof(dynamicArray)));
   dyArr_initialize(dyArr_getElement(lines, dyArr_getCount(lines) - 1));
-  currIndex = 0;
   dyStr_initialize(&str);
 
   while(fgets(fileBuffer, FILE_BUFFER_SIZE, file)) {
     dyStr_appendStr(&str, fileBuffer);
+    currIndex = 0;
     while(dyStr_getStr(&str)[currIndex]) {
       sepMatch = 0;
       if(dyStr_getStr(&str)[currIndex] == lineSeparator[0]) {
