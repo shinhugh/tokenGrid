@@ -5,7 +5,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "dynamicArray.h"
+#include "dynamicString.h"
 #include "tokenGrid.h"
+
+#define FILE_BUFFER_SIZE 1024
 
 // ------------------------------------------------------------
 
@@ -22,11 +25,113 @@ tokenGrid * tokGd_tokenizeFile(FILE *file, const char *tokenSeparator,
 const char *lineSeparator, unsigned char noEmptyToken) {
 
   unsigned int i, j;
+  tokenGrid *result;
+  dynamicArray *lines;
+  char *newToken;
+  unsigned int currIndex;
+  unsigned int sepIndex;
+  dynamicString str;
+  char fileBuffer[FILE_BUFFER_SIZE];
 
   TOKGD_OUT_OF_BOUNDS = 0;
 
-  // TODO
-  return 0;
+  result = malloc(sizeof(tokenGrid));
+  result->tokens = malloc(sizeof(dynamicArray));
+  result->totalCount = 0;
+  lines = (dynamicArray*) result->tokens;
+  dyArr_initialize(lines);
+  dyArr_appendElement(lines, malloc(sizeof(dynamicArray)));
+  dyArr_initialize(dyArr_getElement(lines, dyArr_getCount(lines) - 1));
+  currIndex = 0;
+  dyStr_initialize(&str);
+
+  while(fgets(fileBuffer, FILE_BUFFER_SIZE, file)) {
+    dyStr_appendStr(str, fileBuffer);
+    while(dyStr_getStr(&str)[currIndex]) {
+      if(dyStr_getStr(&str)[currIndex] == lineSeparator[0]) {
+        sepIndex = 0;
+        while(dyStr_getStr(&str)[currIndex + sepIndex]
+        == lineSeparator[sepIndex]) {
+          if(lineSeparator[sepIndex + 1] == 0) {
+            newToken = malloc(currIndex);
+            memcpy(newToken, dyStr_getStr(&str), currIndex);
+            newToken[currIndex] = 0;
+            dyArr_appendElement(
+            dyArr_getElement(lines, dyArr_getCount(lines) - 1), newToken);
+            dyArr_appendElement(lines, malloc(sizeof(dynamicArray)));
+            dyArr_initialize(dyArr_getElement(lines,
+            dyArr_getCount(lines) - 1));
+            result->totalCount++;
+            dyStr_removePart(&str, 0, currIndex + sepIndex + 1);
+            currIndex = 0;
+            break;
+          }
+          sepIndex++;
+        }
+      }
+      else if(dyStr_getStr(&str)[currIndex] == tokenSeparator[0]) {
+        sepIndex = 0;
+        while(dyStr_getStr(&str)[currIndex + sepIndex]
+        == tokenSeparator[sepIndex]) {
+          if(tokenSeparator[sepIndex + 1] == 0) {
+            newToken = malloc(currIndex);
+            memcpy(newToken, dyStr_getStr(&str), currIndex);
+            newToken[currIndex] = 0;
+            dyArr_appendElement(
+            dyArr_getElement(lines, dyArr_getCount(lines) - 1), newToken);
+            result->totalCount++;
+            dyStr_removePart(&str, 0, currIndex + sepIndex + 1);
+            currIndex = 0;
+            break;
+          }
+          sepIndex++;
+        }
+      }
+      else {
+        currIndex++;
+      }
+    }
+  }
+
+  if(currIndex > 0) {
+    newToken = malloc(currIndex);
+    memcpy(newToken, dyStr_getStr(&str), currIndex);
+    newToken[currIndex] = 0;
+    dyArr_appendElement(
+    dyArr_getElement(lines, dyArr_getCount(lines) - 1), newToken);
+    result->totalCount++;
+  }
+
+  dyStr_deinitialize(&str);
+
+  if(dyArr_getCount(dyArr_getElement(lines, dyArr_getCount(lines) - 1)) == 0) {
+    dyArr_deinitialize(dyArr_getElement(lines, dyArr_getCount(lines) - 1));
+    free(dyArr_getElement(lines, dyArr_getCount(lines) - 1));
+    dyArr_removeElement(lines, dyArr_getCount(lines) - 1);
+  }
+
+  if(noEmptyToken) {
+    for(i = 0; i < dyArr_getCount(lines); i++) {
+      for(j = 0; j < dyArr_getCount(dyArr_getElement(lines, i)); j++) {
+        if(((char*) dyArr_getElement(dyArr_getElement(lines, i), j))[0] == 0) {
+          free(dyArr_getElement(dyArr_getElement(lines, i), j));
+          dyArr_removeElement(dyArr_getElement(lines, i), j);
+          result->totalCount--;
+          j--;
+        }
+      }
+    }
+    for(i = 0; i < dyArr_getCount(lines); i++) {
+      if(dyArr_getCount(dyArr_getElement(lines, i)) == 0) {
+        dyArr_deinitialize(dyArr_getElement(lines, i));
+        free(dyArr_getElement(lines, i));
+        dyArr_removeElement(lines, i);
+        i--;
+      }
+    }
+  }
+
+  return result;
 
 }
 

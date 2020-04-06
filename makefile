@@ -11,7 +11,7 @@ PATH_DYSTR = lib/dynamicString
 OBJ = tokenGrid.o $(PATH_DYARR)/dynamicArray.o $(PATH_DYSTR)/dynamicString.o
 # Header files
 HEADERS = tokenGrid.h $(PATH_DYARR)/dynamicArray.h $(PATH_DYSTR)/dynamicString.h
-# Targets possible to make
+# All possible targets
 TARGETS = libtokenGrid.a $(OBJ) test
 
 default: libtokenGrid.a
