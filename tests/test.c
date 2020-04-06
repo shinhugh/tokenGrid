@@ -13,7 +13,7 @@ void demonstrateTokenizeStr();
  */
 int main() {
 
-  // demonstrateTokenizeFile();
+  demonstrateTokenizeFile();
   demonstrateTokenizeStr();
 
 }
@@ -31,19 +31,19 @@ void demonstrateTokenizeFile() {
   tokenGrid *grid;
 
   // Open test file
-  file = fopen("./test.txt", "r");
+  file = fopen("./tests/test.txt", "r");
 
   // Tokenize file
   grid = tokGd_tokenizeFile(file, " ", "\n", 1);
-
-  // Close test file
-  fclose(file);
 
   // Check for tokenization error (file was null, etc.)
   if(!grid) {
     fprintf(stderr, "Error: Tokenization unsuccessful.\n");
     return;
   }
+
+  // Close test file
+  fclose(file);
 
   // Print contents of token grid by coordinates
   printf("Iteration by coordinates:\n");
@@ -52,19 +52,20 @@ void demonstrateTokenizeFile() {
     // Iterate through tokens on line
     for(j = 0; j < tokGd_getLineTokenCount(grid, i); j++) {
       // Print token at these coordinates in the grid
-      printf("|%s|", tokGd_getToken_coor(grid, i, j));
+      printf("<%s>", tokGd_getToken_coor(grid, i, j));
     }
     printf("\n");
   }
+  printf("\n");
 
   // Print contents of token grid by overall index
   printf("Iteration by overall index:\n");
   // Iterate by overall index
   for(i = 0; i < tokGd_getTotalCount(grid); i++) {
     // Print token at this overall index in the grid
-    printf("|%s|", tokGd_getToken_index(grid, i));
+    printf("<%s>", tokGd_getToken_index(grid, i));
   }
-  printf("\n");
+  printf("\n\n");
 
   // Free memory used by token grid
   tokGd_cleanup(grid);

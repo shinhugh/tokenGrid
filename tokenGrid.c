@@ -16,11 +16,6 @@ unsigned char TOKGD_OUT_OF_BOUNDS;
 
 // ------------------------------------------------------------
 
-// DEBUG FUNCTION
-void printState(dynamicArray *array);
-
-// ------------------------------------------------------------
-
 tokenGrid * tokGd_tokenizeFile(FILE *file, const char *tokenSeparator,
 const char *lineSeparator, unsigned char noEmptyToken) {
 
@@ -32,8 +27,13 @@ const char *lineSeparator, unsigned char noEmptyToken) {
   unsigned int sepIndex;
   dynamicString str;
   char fileBuffer[FILE_BUFFER_SIZE];
+  unsigned char sepMatch;
 
   TOKGD_OUT_OF_BOUNDS = 0;
+
+  if(!file) {
+    return 0;
+  }
 
   result = malloc(sizeof(tokenGrid));
   result->tokens = malloc(sizeof(dynamicArray));
@@ -46,14 +46,15 @@ const char *lineSeparator, unsigned char noEmptyToken) {
   dyStr_initialize(&str);
 
   while(fgets(fileBuffer, FILE_BUFFER_SIZE, file)) {
-    dyStr_appendStr(str, fileBuffer);
+    dyStr_appendStr(&str, fileBuffer);
     while(dyStr_getStr(&str)[currIndex]) {
+      sepMatch = 0;
       if(dyStr_getStr(&str)[currIndex] == lineSeparator[0]) {
         sepIndex = 0;
         while(dyStr_getStr(&str)[currIndex + sepIndex]
         == lineSeparator[sepIndex]) {
           if(lineSeparator[sepIndex + 1] == 0) {
-            newToken = malloc(currIndex);
+            newToken = malloc(currIndex + 1);
             memcpy(newToken, dyStr_getStr(&str), currIndex);
             newToken[currIndex] = 0;
             dyArr_appendElement(
@@ -63,7 +64,7 @@ const char *lineSeparator, unsigned char noEmptyToken) {
             dyArr_getCount(lines) - 1));
             result->totalCount++;
             dyStr_removePart(&str, 0, currIndex + sepIndex + 1);
-            currIndex = 0;
+            sepMatch = 1;
             break;
           }
           sepIndex++;
@@ -74,27 +75,29 @@ const char *lineSeparator, unsigned char noEmptyToken) {
         while(dyStr_getStr(&str)[currIndex + sepIndex]
         == tokenSeparator[sepIndex]) {
           if(tokenSeparator[sepIndex + 1] == 0) {
-            newToken = malloc(currIndex);
+            newToken = malloc(currIndex + 1);
             memcpy(newToken, dyStr_getStr(&str), currIndex);
             newToken[currIndex] = 0;
             dyArr_appendElement(
             dyArr_getElement(lines, dyArr_getCount(lines) - 1), newToken);
             result->totalCount++;
             dyStr_removePart(&str, 0, currIndex + sepIndex + 1);
-            currIndex = 0;
+            sepMatch = 1;
             break;
           }
           sepIndex++;
         }
       }
-      else {
+      if(sepMatch) {
+        currIndex = 0;
+      } else {
         currIndex++;
       }
     }
   }
 
   if(currIndex > 0) {
-    newToken = malloc(currIndex);
+    newToken = malloc(currIndex + 1);
     memcpy(newToken, dyStr_getStr(&str), currIndex);
     newToken[currIndex] = 0;
     dyArr_appendElement(
@@ -356,21 +359,5 @@ void tokGd_cleanup(tokenGrid *grid) {
   dyArr_deinitialize(lines);
   free(lines);
   free(grid);
-
-}
-
-// ------------------------------------------------------------
-
-// DEBUG FUNCTION
-void printState(dynamicArray *array) {
-
-  unsigned int i, j;
-
-  for(i = 0; i < dyArr_getCount(array); i++) {
-    for(j = 0; j < dyArr_getCount(dyArr_getElement(array, i)); j++) {
-      printf("(%d, %d): %s\n", i, j,
-      (char*) dyArr_getElement(dyArr_getElement(array, i), j));
-    }
-  }
 
 }
