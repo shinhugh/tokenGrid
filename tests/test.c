@@ -84,7 +84,7 @@ void demonstrateTokenizeStr() {
   tokenGrid *grid;
 
   // String to test on
-  str = "first second  third\nfourth fifth\n\nsixth seventh";
+  str = "first second  third\nfourth fifth\n\nsixth";
 
   // Tokenize file
   grid = tokGd_tokenizeStr(str, " ", "\n", 1);
