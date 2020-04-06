@@ -84,18 +84,10 @@ void demonstrateTokenizeStr() {
   tokenGrid *grid;
 
   // String to test on
-  str = malloc(38);
-  memcpy(str, "first second third\nfourth fifth sixth", 37);
-  str[37] = 0;
-
-  // DEBUG
-  printf("main: |%s|\n", str);
+  str = "first second  third\nfourth fifth\n\nsixth seventh";
 
   // Tokenize file
   grid = tokGd_tokenizeStr(str, " ", "\n");
-
-  // Free string memory
-  free(str);
 
   // Check for tokenization error (file was null, etc.)
   if(!grid) {
@@ -110,7 +102,7 @@ void demonstrateTokenizeStr() {
     // Iterate through tokens on line
     for(j = 0; j < tokGd_getLineTokenCount(grid, i); j++) {
       // Print token at these coordinates in the grid
-      printf("|%s|", tokGd_getToken_coor(grid, i, j));
+      printf("<%s>", tokGd_getToken_coor(grid, i, j));
     }
     printf("\n");
   }
@@ -121,7 +113,7 @@ void demonstrateTokenizeStr() {
   // Iterate by overall index
   for(i = 0; i < tokGd_getTotalCount(grid); i++) {
     // Print token at this overall index in the grid
-    printf("|%s|", tokGd_getToken_index(grid, i));
+    printf("<%s>", tokGd_getToken_index(grid, i));
   }
   printf("\n\n");
 
