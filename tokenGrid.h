@@ -9,6 +9,13 @@
 
 // ------------------------------------------------------------
 
+// Global flags
+// Flags are all reset at the start of every function call.
+
+extern unsigned char TOKGD_OUT_OF_BOUNDS;
+
+// ------------------------------------------------------------
+
 // Type definitions
 
 typedef struct tokenGrid {

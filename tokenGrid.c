@@ -12,6 +12,10 @@
 
 // ------------------------------------------------------------
 
+unsigned char TOKGD_OUT_OF_BOUNDS;
+
+// ------------------------------------------------------------
+
 // DEBUG FUNCTION
 void printState(dynamicArray *array);
 
@@ -19,6 +23,10 @@ void printState(dynamicArray *array);
 
 tokenGrid * tokGd_tokenizeFile(FILE *file, const char *tokenSeparator,
 const char *lineSeparator, unsigned char noEmptyToken) {
+
+  unsigned int i, j;
+
+  TOKGD_OUT_OF_BOUNDS = 0;
 
   // TODO
   return 0;
@@ -37,6 +45,8 @@ const char *lineSeparator, unsigned char noEmptyToken) {
   unsigned int startIndex, currIndex;
   unsigned int sepIndex;
 
+  TOKGD_OUT_OF_BOUNDS = 0;
+
   result = malloc(sizeof(tokenGrid));
   result->tokens = malloc(sizeof(dynamicArray));
   result->totalCount = 0;
@@ -49,7 +59,7 @@ const char *lineSeparator, unsigned char noEmptyToken) {
 
   while(str[currIndex]) {
     if(str[currIndex] == lineSeparator[0]) {
-      sepIndex = 0; // TODO: edge case: currIndex - startIndex == 0
+      sepIndex = 0;
       while(str[currIndex + sepIndex] == lineSeparator[sepIndex]) {
         if(lineSeparator[sepIndex + 1] == 0) {
           newToken = malloc(currIndex - startIndex + 1);
@@ -68,7 +78,7 @@ const char *lineSeparator, unsigned char noEmptyToken) {
       }
     }
     else if(str[currIndex] == tokenSeparator[0]) {
-      sepIndex = 0; // TODO: edge case: currIndex - startIndex == 0
+      sepIndex = 0;
       while(str[currIndex + sepIndex] == tokenSeparator[sepIndex]) {
         if(tokenSeparator[sepIndex + 1] == 0) {
           newToken = malloc(currIndex - startIndex + 1);
@@ -133,13 +143,17 @@ unsigned int inlineIndex) {
 
   dynamicArray *lines;
 
+  TOKGD_OUT_OF_BOUNDS = 0;
+
   lines = (dynamicArray*) grid->tokens;
 
   if(lineIndex >= dyArr_getCount(lines)) {
-    // TODO
+    TOKGD_OUT_OF_BOUNDS = 1;
+    return 0;
   }
   if(inlineIndex >= dyArr_getCount(dyArr_getElement(lines, lineIndex))) {
-    // TODO
+    TOKGD_OUT_OF_BOUNDS = 1;
+    return 0;
   }
 
   return dyArr_getElement(dyArr_getElement(lines, lineIndex), inlineIndex);
@@ -154,10 +168,13 @@ const char * tokGd_getToken_index(const tokenGrid *grid, unsigned int index) {
   dynamicArray *lines;
   unsigned int currIndex, currLineLength;
 
+  TOKGD_OUT_OF_BOUNDS = 0;
+
   lines = (dynamicArray*) grid->tokens;
 
   if(index >= grid->totalCount) {
-    // TODO
+    TOKGD_OUT_OF_BOUNDS = 1;
+    return 0;
   }
 
   currIndex = 0;
@@ -175,6 +192,8 @@ const char * tokGd_getToken_index(const tokenGrid *grid, unsigned int index) {
 
 unsigned int tokGd_getTotalCount(const tokenGrid *grid) {
 
+  TOKGD_OUT_OF_BOUNDS = 0;
+
   return grid->totalCount;
 
 }
@@ -184,6 +203,8 @@ unsigned int tokGd_getTotalCount(const tokenGrid *grid) {
 unsigned int tokGd_getLineCount(const tokenGrid *grid) {
 
   dynamicArray *lines;
+
+  TOKGD_OUT_OF_BOUNDS = 0;
 
   lines = (dynamicArray*) grid->tokens;
 
@@ -198,10 +219,13 @@ unsigned int lineIndex) {
 
   dynamicArray *lines;
 
+  TOKGD_OUT_OF_BOUNDS = 0;
+
   lines = (dynamicArray*) grid->tokens;
 
   if(lineIndex >= dyArr_getCount(lines)) {
-    // TODO
+    TOKGD_OUT_OF_BOUNDS = 1;
+    return 0;
   }
 
   return dyArr_getCount(dyArr_getElement(lines, lineIndex));
@@ -214,6 +238,8 @@ void tokGd_cleanup(tokenGrid *grid) {
 
   unsigned int i, j;
   dynamicArray *lines;
+
+  TOKGD_OUT_OF_BOUNDS = 0;
 
   lines = (dynamicArray*) grid->tokens;
 
