@@ -1,7 +1,7 @@
 # Compiler
 CC = gcc
 # Compiler flags
-CFLAGS = -I . -L .
+CFLAGS = -I . -I lib/dynamicArray -L . -L lib/dynamicArray
 # Targets to make
 TARGETS = libtokenGrid.a tokenGrid.o lib/dynamicArray/dynamicArray.o
 
@@ -13,15 +13,15 @@ libtokenGrid.a: tokenGrid.o lib/dynamicArray/dynamicArray.o
 
 # Make tokenGrid.o
 tokenGrid.o: tokenGrid.c tokenGrid.h lib/dynamicArray/dynamicArray.h
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CC) -c -o $@ $< -I . -I lib/dynamicArray
 
 # Make dynamicArray.o
 lib/dynamicArray/dynamicArray.o: lib/dynamicArray/dynamicArray.c lib/dynamicArray/dynamicArray.h
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CC) -c -o $@ $< -I lib/dynamicArray
 
 # Make test program
 test: test/test.c libtokenGrid.a
-	$(CC) $< $(CFLAGS) -l tokenGrid
+	$(CC) $< -I . -I lib/dynamicArray -l tokenGrid
 
 .PHONY: clean
 
