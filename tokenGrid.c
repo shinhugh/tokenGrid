@@ -12,19 +12,8 @@
 
 // ------------------------------------------------------------
 
-// Helper struct and functions for dynamic string
-
-typedef struct dynamicString {
-  char *str;
-  unsigned int length;
-  unsigned int alloc_size;
-} dynamicString;
-
-void dyStr_appendChar(dynamicString *dyStr, char c);
-void dyStr_appendStr(dynamicString *dyStr, char *s);
-void dyStr_fit(dynamicString *dyStr);
-void dyStr_initialize(dynamicString *dyStr);
-void dyStr_deinitialize(dynamicString *dyStr);
+// DEBUG FUNCTION
+void printState(dynamicArray *array);
 
 // ------------------------------------------------------------
 
@@ -51,7 +40,9 @@ const char *lineSeparator) {
   result->tokens = malloc(sizeof(dynamicArray));
   result->totalCount = 0;
   lines = (dynamicArray*) result->tokens;
+  dyArr_initialize(lines);
   dyArr_appendElement(lines, malloc(sizeof(dynamicArray)));
+  dyArr_initialize(dyArr_getElement(lines, dyArr_getCount(lines) - 1));
   startIndex = 0;
   currIndex = 0;
 
@@ -66,6 +57,7 @@ const char *lineSeparator) {
           dyArr_appendElement(
           dyArr_getElement(lines, dyArr_getCount(lines) - 1), newToken);
           dyArr_appendElement(lines, malloc(sizeof(dynamicArray)));
+          dyArr_initialize(dyArr_getElement(lines, dyArr_getCount(lines) - 1));
           result->totalCount++;
           currIndex += sepIndex;
           startIndex = currIndex + 1;
@@ -104,6 +96,7 @@ const char *lineSeparator) {
   }
 
   if(dyArr_getCount(dyArr_getElement(lines, dyArr_getCount(lines) - 1)) == 0) {
+    dyArr_deinitialize(dyArr_getElement(lines, dyArr_getCount(lines) - 1));
     free(dyArr_getElement(lines, dyArr_getCount(lines) - 1));
     dyArr_removeElement(lines, dyArr_getCount(lines) - 1);
   }
@@ -139,6 +132,8 @@ const char * tokGd_getToken_index(const tokenGrid *grid, unsigned int index) {
   unsigned int i;
   dynamicArray *lines;
   unsigned int currIndex, currLineLength;
+
+  lines = (dynamicArray*) grid->tokens;
 
   if(index >= grid->totalCount) {
     // TODO
@@ -205,11 +200,26 @@ void tokGd_cleanup(tokenGrid *grid) {
     for(j = 0; j < dyArr_getCount(dyArr_getElement(lines, i)); j++) {
       free(dyArr_getElement(dyArr_getElement(lines, i), j));
     }
+    dyArr_deinitialize(dyArr_getElement(lines, i));
     free(dyArr_getElement(lines, i));
   }
+  dyArr_deinitialize(lines);
   free(lines);
   free(grid);
 
 }
 
 // ------------------------------------------------------------
+
+// DEBUG FUNCTION
+void printState(dynamicArray *array) {
+
+  unsigned int i, j;
+
+  for(i = 0; i < dyArr_getCount(array); i++) {
+    for(j = 0; j < dyArr_getCount(dyArr_getElement(array, i)); j++) {
+      printf("(%d, %d): %s\n", i, j, (char*) dyArr_getElement(dyArr_getElement(array, i), j));
+    }
+  }
+
+}

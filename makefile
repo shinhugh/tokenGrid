@@ -20,8 +20,8 @@ lib/dynamicArray/dynamicArray.o: $(DYARR_PATH)/dynamicArray.c $(DYARR_PATH)/dyna
 	$(CC) -c -o $@ $< -I $(DYARR_PATH)
 
 # Make test program
-test: test/test.c libtokenGrid.a
-	$(CC) -o test.out $< -I . -I $(DYARR_PATH) -L . -L $(DYARR_PATH) -l tokenGrid
+test: tests/test.c libtokenGrid.a
+	$(CC) -o test $< -I . -I $(DYARR_PATH) -L . -L $(DYARR_PATH) -l tokenGrid
 
 .PHONY: clean
 

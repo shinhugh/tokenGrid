@@ -88,6 +88,9 @@ void demonstrateTokenizeStr() {
   memcpy(str, "first second third\nfourth fifth sixth", 37);
   str[37] = 0;
 
+  // DEBUG
+  printf("main: |%s|\n", str);
+
   // Tokenize file
   grid = tokGd_tokenizeStr(str, " ", "\n");
 
