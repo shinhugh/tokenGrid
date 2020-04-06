@@ -34,7 +34,7 @@ void demonstrateTokenizeFile() {
   file = fopen("./tests/test.txt", "r");
 
   // Tokenize file
-  grid = tokGd_tokenizeFile(file, " ", "\n", 1);
+  grid = tokGd_tokenizeFile(file, "  ", "\n\n", 1);
 
   // Check for tokenization error (file was null, etc.)
   if(!grid) {
@@ -54,7 +54,7 @@ void demonstrateTokenizeFile() {
       // Print token at these coordinates in the grid
       printf("<%s>", tokGd_getToken_coor(grid, i, j));
     }
-    printf("\n");
+    printf("\nENDLINE\n");
   }
   printf("\n");
 
@@ -85,10 +85,10 @@ void demonstrateTokenizeStr() {
   tokenGrid *grid;
 
   // String to test on
-  str = "first second  third\nfourth fifth\n\nsixth";
+  str = "first second  third\n\nfourth fifth\n\n\nsixth";
 
   // Tokenize file
-  grid = tokGd_tokenizeStr(str, " ", "\n", 1);
+  grid = tokGd_tokenizeStr(str, " ", "\n\n", 1);
 
   // Check for tokenization error (file was null, etc.)
   if(!grid) {
@@ -105,7 +105,7 @@ void demonstrateTokenizeStr() {
       // Print token at these coordinates in the grid
       printf("<%s>", tokGd_getToken_coor(grid, i, j));
     }
-    printf("\n");
+    printf("\nENDLINE\n");
   }
   printf("\n");
 
