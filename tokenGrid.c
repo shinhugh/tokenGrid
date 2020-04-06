@@ -105,8 +105,9 @@ const char *lineSeparator, unsigned char noEmptyToken) {
   if(noEmptyToken) {
     for(i = 0; i < dyArr_getCount(lines); i++) {
       for(j = 0; j < dyArr_getCount(dyArr_getElement(lines, i)); j++) {
-        if(dyArr_getElement(dyArr_getElement(lines, i), j)[0] == 0) {
+        if(((char*) dyArr_getElement(dyArr_getElement(lines, i), j))[0] == 0) {
           dyArr_removeElement(dyArr_getElement(lines, i), j);
+          result->totalCount--;
           j--;
         }
       }

@@ -34,7 +34,7 @@ void demonstrateTokenizeFile() {
   file = fopen("./test.txt", "r");
 
   // Tokenize file
-  grid = tokGd_tokenizeFile(file, " ", "\n");
+  grid = tokGd_tokenizeFile(file, " ", "\n", 1);
 
   // Close test file
   fclose(file);
@@ -87,7 +87,7 @@ void demonstrateTokenizeStr() {
   str = "first second  third\nfourth fifth\n\nsixth seventh";
 
   // Tokenize file
-  grid = tokGd_tokenizeStr(str, " ", "\n");
+  grid = tokGd_tokenizeStr(str, " ", "\n", 1);
 
   // Check for tokenization error (file was null, etc.)
   if(!grid) {
