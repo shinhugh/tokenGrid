@@ -3,7 +3,7 @@ CC = gcc
 # dynamicArray path
 DYARR_PATH = lib/dynamicArray
 # Targets to make
-TARGETS = libtokenGrid.a tokenGrid.o $(DYARR_PATH)/dynamicArray.o test.out
+TARGETS = libtokenGrid.a tokenGrid.o $(DYARR_PATH)/dynamicArray.o test
 
 all: libtokenGrid.a
 
