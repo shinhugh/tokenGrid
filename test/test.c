@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "tokenGrid.h"
 
@@ -30,7 +31,7 @@ void demonstrateTokenizeFile() {
   tokenGrid *grid;
 
   // Open test file
-  file = fopen("./test.txt");
+  file = fopen("./test.txt", "r");
 
   // Tokenize file
   grid = tokGd_tokenizeFile(file, " ", "\n");

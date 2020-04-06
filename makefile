@@ -1,30 +1,30 @@
 # Compiler
 CC = gcc
-# Compiler flags
-CFLAGS = -I . -I lib/dynamicArray -L . -L lib/dynamicArray
+# dynamicArray path
+DYARR_PATH = lib/dynamicArray
 # Targets to make
-TARGETS = libtokenGrid.a tokenGrid.o lib/dynamicArray/dynamicArray.o
+TARGETS = libtokenGrid.a tokenGrid.o $(DYARR_PATH)/dynamicArray.o test.out
 
 all: libtokenGrid.a
 
 # Make static library tokenGrid
-libtokenGrid.a: tokenGrid.o lib/dynamicArray/dynamicArray.o
+libtokenGrid.a: tokenGrid.o $(DYARR_PATH)/dynamicArray.o
 	ar rcs $@ $^
 
 # Make tokenGrid.o
-tokenGrid.o: tokenGrid.c tokenGrid.h lib/dynamicArray/dynamicArray.h
-	$(CC) -c -o $@ $< -I . -I lib/dynamicArray
+tokenGrid.o: tokenGrid.c tokenGrid.h $(DYARR_PATH)/dynamicArray.h
+	$(CC) -c -o $@ $< -I . -I $(DYARR_PATH)
 
 # Make dynamicArray.o
-lib/dynamicArray/dynamicArray.o: lib/dynamicArray/dynamicArray.c lib/dynamicArray/dynamicArray.h
-	$(CC) -c -o $@ $< -I lib/dynamicArray
+lib/dynamicArray/dynamicArray.o: $(DYARR_PATH)/dynamicArray.c $(DYARR_PATH)/dynamicArray.h
+	$(CC) -c -o $@ $< -I $(DYARR_PATH)
 
 # Make test program
 test: test/test.c libtokenGrid.a
-	$(CC) $< -I . -I lib/dynamicArray -l tokenGrid
+	$(CC) -o test.out $< -I . -I $(DYARR_PATH) -L . -L $(DYARR_PATH) -l tokenGrid
 
 .PHONY: clean
 
 # Remove all but source code
 clean:
-	rm $(TARGETS)
+	rm -rf $(TARGETS)
