@@ -292,6 +292,9 @@ const char * tokGd_getToken_index(const tokenGrid *grid, unsigned int index) {
     currIndex += currLineLength;
   }
 
+  TOKGD_OUT_OF_BOUNDS = 1;
+  return 0;
+
 }
 
 // ------------------------------------------------------------

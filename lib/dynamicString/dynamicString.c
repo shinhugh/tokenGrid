@@ -27,7 +27,7 @@ const char * dyStr_getStr(dynamicString *str) {
 
 void dyStr_setStr(dynamicString *str, const char *newStr) {
 
-  unsigned char newStrLength;
+  unsigned int newStrLength;
   char *transferPtr;
   unsigned int newSize;
 
@@ -63,7 +63,7 @@ void dyStr_setStr(dynamicString *str, const char *newStr) {
 
 void dyStr_appendStr(dynamicString *str, const char *newStr) {
 
-  unsigned char newStrLength;
+  unsigned int newStrLength;
   char *transferPtr;
   unsigned int newSize;
 

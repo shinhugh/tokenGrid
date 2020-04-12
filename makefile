@@ -1,7 +1,7 @@
 # Compiler
 CC = gcc
 # Compiler flags
-CFLAGS = -g -I . -I $(PATH_DYARR) -I $(PATH_DYSTR) -L . -L $(PATH_DYARR) \
+CFLAGS = -g -Wall -I . -I $(PATH_DYARR) -I $(PATH_DYSTR) -L . -L $(PATH_DYARR) \
 -L $(PATH_DYSTR)
 # dynamicArray path
 PATH_DYARR = lib/dynamicArray
